@@ -1,0 +1,60 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    container: golang:1.14
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v1
+      - name: "Run revive"
+        uses: docker://morphy/revive-action:v1
+        with:
+          config: .github/revive/config.toml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    container: golang:1.14
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v1
+      - name: "Run tests"
+        run: |
+          go get -v -t -d ./...
+          go get github.com/haya14busa/goverage
+          goverage -race -v -covermode=atomic -coverprofile=coverage.out ./...
+      - name: "Upload coverage"
+        uses: actions/upload-artifact@v1
+        with:
+          name: coverage
+          path: coverage.out
+
+  coverage:
+    name: Coverage
+    needs: [test]
+    runs-on: ubuntu-latest
+    container: golang:1.14
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v1
+      - name: "Download coverage"
+        uses: actions/download-artifact@v1
+        with:
+          name: coverage
+      - name: "Send coverage to codacy"
+        run: |
+          go get github.com/schrej/godacov
+          godacov -t "$CODACY_TOKEN" -r ./coverage/coverage.out -c "$COMMIT_SHA"
+        env:
+          COMMIT_SHA: ${{ github.sha }}
+          CODACY_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
