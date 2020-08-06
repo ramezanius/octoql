@@ -10,7 +10,7 @@ OctoQL
 OctoQL is a starter kit for building amazing GraphQL API's with Go.
 
 Installation
-============
+------------
 
 To install OctoQL, use `go get`:
 
@@ -19,13 +19,13 @@ To install OctoQL, use `go get`:
 ------
 
 Staying up to date
-==================
+------------------
 
 To update OctoQL to the latest version, use `go get -u github.com/ramezanius/octoql`.
 
 ------
 
 License
-=======
+-------
 
 This project licensed under the terms of the [MIT](LICENCE) license.
