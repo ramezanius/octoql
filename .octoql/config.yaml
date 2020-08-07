@@ -1,0 +1,14 @@
+debug: true
+
+cache:
+  host: :0000
+
+server:
+  host: :8000
+
+database:
+  user: root
+  pass: pass
+  host: :0000
+  dialect: dialect
+  database: octoql
