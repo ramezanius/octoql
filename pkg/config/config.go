@@ -23,14 +23,17 @@ type cfg struct {
 	}
 }
 
+// C common configuration
 var C *cfg
 
+// DefaultPath default configuration path
 const DefaultPath = ".octoql/config.yaml"
 
 func init() {
 	Load(config.Root)
 }
 
+// Load loads configuration from file with specific path
 func Load(path string) {
 	// Set default configuration path
 	if path == config.Root {

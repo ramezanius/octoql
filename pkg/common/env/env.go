@@ -4,13 +4,17 @@ import (
 	"os"
 )
 
+// Env environment type
 type Env string
 
 var (
-	Production  Env = "PROD"
+	// Production environment
+	Production Env = "PROD"
+	// Development environment
 	Development Env = "DEV"
 )
 
+// Environment common environment
 var Environment Env
 
 func init() {
